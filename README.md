@@ -68,7 +68,8 @@ People don't share tools; they share moments. Late-night cravings often lead to 
 - [x] Phase 0: Trust & Polish (Fix design, generic bank SMS, link previews)
 - [x] Phase 1: Personalization & Shareable Cards
 - [x] Phase 2: Reactivate Passbook & Streaks
-- [ ] Phase 3: Leaderboards & "Beggy Wrapped"
+- [x] Phase 3a: Weekly city & all-India leaderboards
+- [ ] Phase 3b: "Beggy Wrapped"
 - [ ] Phase 4: Localization (Hindi, Tamil, Kannada)
 
 ## 📄 License
