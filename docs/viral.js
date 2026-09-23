@@ -174,7 +174,7 @@
             <div><span>Order</span><strong>#${orderNo}</strong></div>
             <div><span>Paid by</span><strong>${esc(g.from)}</strong></div>
             <div><span>Amount</span><strong>₹${g.amount}</strong></div>
-            <div><span>ETA</span><strong>~11 min</strong></div>
+            <div><span>ETA</span><strong>~2 min</strong></div>
           </div>
           <button class="gh-track-btn" id="gh-track-btn" type="button">Track my order ➔</button>
         </div>
@@ -326,11 +326,26 @@
     }).observe(reveal, { attributes: true, attributeFilter: ['style'] });
   }
 
+  function buildPostDeliveryGhost() {
+    const sub = document.querySelector('#post-delivery-modal .pdm-sub');
+    if (!sub || document.getElementById('pdm-ghost-btn')) return;
+    const b = el(`<button class="rv-ghost-btn pdm-ghost-btn" id="pdm-ghost-btn" type="button">👻 Now ghost a friend with a fake order</button>`);
+    sub.insertAdjacentElement('afterend', b);
+    b.addEventListener('click', () => { track('ghost_entry', { from: 'post_delivery' }); openGhost(); });
+  }
+
+  function hideZeptoBanner() {
+    try { sessionStorage.setItem('zepto_banner_dismissed', 'true'); } catch (e) {}
+    const z = document.getElementById('zepto-slide-banner');
+    if (z) { z.classList.remove('show'); z.style.display = 'none'; }
+  }
+
   function buildHeroGhost() {
     const wrap = document.querySelector('#hero-ticker-section .hero-cta-wrap');
     if (!wrap) return;
-    const b = el(`<button class="hero-ghost-btn" id="hero-ghost-btn" type="button">👻 Or ghost a friend with a fake order</button>`);
-    wrap.appendChild(b);
+    const b = el(`<button class="hero-ghost-btn" id="hero-ghost-btn" type="button"><span class="hg-main">👻 Ghost a friend</span><span class="hg-sub">Send them a fake order with their name on it</span></button>`);
+    const truth = wrap.querySelector('.hero-tiny-truth');
+    wrap.insertBefore(b, truth || null);
     b.addEventListener('click', () => { track('ghost_entry', { from: 'hero' }); openGhost(); });
   }
 
@@ -373,6 +388,7 @@
     if (!window.BeggyApp) return;
     bindAnalytics();
     buildHeroGhost();
+    buildPostDeliveryGhost();
     buildBoard();
     buildRevealExtras();
 
@@ -381,6 +397,7 @@
 
     incomingGhost = parseGhost();
     if (incomingGhost) {
+      hideZeptoBanner();
       track('ghost_opened', { amount: incomingGhost.amount });
       showGhostArrival(incomingGhost);
     }
