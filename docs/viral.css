@@ -3,10 +3,19 @@
   font-family: var(--font-family); cursor: pointer; border-radius: var(--radius-md);
 }
 .hero-ghost-btn {
-  margin-top: 12px; background: transparent; border: 1px dashed var(--border-bright);
-  color: var(--text-sub); padding: 10px 16px; font-size: 0.9rem; font-weight: 600;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  width: 100%; max-width: 420px; margin: 12px auto 0; padding: 14px 18px; border: none;
+  background: linear-gradient(135deg, #7C3AED, #4F46E5); color: #fff;
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.35); transition: transform 0.15s ease;
 }
-.hero-ghost-btn:hover { color: var(--beggy-orange); border-color: var(--beggy-orange); }
+.hero-ghost-btn .hg-main { font-size: 1.1rem; font-weight: 800; }
+.hero-ghost-btn .hg-sub { font-size: 0.8rem; font-weight: 600; opacity: 0.85; }
+.hero-ghost-btn:hover { transform: translateY(-1px); }
+.hero-ghost-btn:active { transform: scale(0.98); }
+.pdm-ghost-btn { margin: 14px 0 4px; }
+
+/* Stop the page from scrolling sideways on phones (chip row + off-screen cart drawer) */
+html, body { overflow-x: clip; }
 
 .rv-ghost-btn {
   width: 100%; margin-bottom: 14px; padding: 16px; border: none; font-size: 1rem; font-weight: 800;
