@@ -340,6 +340,25 @@
     if (z) { z.classList.remove('show'); z.style.display = 'none'; }
   }
 
+  // Zepto banner: show at most once per device, and never on top of a popup or ride screen.
+  function tameZeptoBanner() {
+    const z = document.getElementById('zepto-slide-banner');
+    if (!z) return;
+    try {
+      if (localStorage.getItem('beggy_zepto_seen') === '1') sessionStorage.setItem('zepto_banner_dismissed', 'true');
+    } catch (e) {}
+    const BUSY = ['post-delivery-modal', 'checkout-modal', 'tracking-screen', 'reveal-screen', 'ghost-modal', 'ghost-arrival', 'ghost-reveal'];
+    const shown = (node) => node && node.style.display !== 'none' && getComputedStyle(node).display !== 'none';
+    const busy = () => BUSY.some((id) => shown(document.getElementById(id))) ||
+      !!document.querySelector('#cart-drawer.open');
+    const check = () => {
+      if (!shown(z)) return;
+      try { localStorage.setItem('beggy_zepto_seen', '1'); } catch (e) {}
+      z.classList.toggle('zsb-hidden-busy', busy());
+    };
+    new MutationObserver(check).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['style', 'class'], childList: true });
+  }
+
   function buildHeroGhost() {
     const wrap = document.querySelector('#hero-ticker-section .hero-cta-wrap');
     if (!wrap) return;
@@ -389,6 +408,7 @@
     bindAnalytics();
     buildHeroGhost();
     buildPostDeliveryGhost();
+    tameZeptoBanner();
     buildBoard();
     buildRevealExtras();
 

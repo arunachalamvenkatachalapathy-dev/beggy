@@ -106,3 +106,6 @@ html, body { overflow-x: clip; }
 .lb-name { flex: 1; font-weight: 700; color: var(--text-main); }
 .lb-amt { font-weight: 800; color: var(--beggy-green); }
 .lb-empty, .lb-foot { font-size: 0.8rem; color: var(--text-muted); margin: 6px 0; text-align: center; }
+
+/* Zepto banner stays out of the way of popups and ride screens */
+.zsb-banner.zsb-hidden-busy { display: none !important; }
