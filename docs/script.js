@@ -846,19 +846,44 @@
     }
   }
 
+  let cartReturnFocus = null;
+
   function openCartDrawer() {
     const drawer = document.getElementById('cart-drawer');
     const backdrop = document.getElementById('cart-backdrop');
-    if (drawer) drawer.classList.add('open');
+    if (drawer) {
+      cartReturnFocus = document.activeElement;
+      drawer.classList.add('open');
+      // Screen readers: expose the open cart and move focus into it
+      drawer.setAttribute('aria-hidden', 'false');
+      drawer.removeAttribute('inert');
+      const firstBtn = drawer.querySelector('button, [href], input, [tabindex]:not([tabindex="-1"])');
+      if (firstBtn) setTimeout(() => firstBtn.focus(), 50);
+    }
     if (backdrop) backdrop.classList.add('open');
   }
 
   function closeCartDrawer() {
     const drawer = document.getElementById('cart-drawer');
     const backdrop = document.getElementById('cart-backdrop');
-    if (drawer) drawer.classList.remove('open');
+    if (drawer) {
+      // Move focus out before hiding so it never sits inside an aria-hidden region
+      if (drawer.contains(document.activeElement) && cartReturnFocus && cartReturnFocus.focus) {
+        cartReturnFocus.focus();
+      } else if (drawer.contains(document.activeElement)) {
+        document.activeElement.blur();
+      }
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+      drawer.setAttribute('inert', '');
+    }
     if (backdrop) backdrop.classList.remove('open');
   }
+
+  document.addEventListener('keydown', (e) => {
+    const drawer = document.getElementById('cart-drawer');
+    if (e.key === 'Escape' && drawer && drawer.classList.contains('open')) closeCartDrawer();
+  });
 
   // ── Tracking Screen — The 11-Minute Rider Mini-Movie ─────────────────────────
   let trackingMap = null;
