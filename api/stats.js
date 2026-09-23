@@ -14,11 +14,6 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      // One-time removal of the pre-launch test order (Rs 458, 23 Sep 2026). Runs once, then this block can go.
-      if (await kv.set('beggy:reset:test-2026-09-23', '1', { nx: true })) {
-        await kv.decrby('beggy:totalSaved', 458);
-        await kv.decr('beggy:orders');
-      }
       const totalSaved = Number((await kv.get('beggy:totalSaved')) || 0);
       const orders = Number((await kv.get('beggy:orders')) || 0);
       return res.status(200).json({ ok: true, kv: true, totalSaved, orders });
